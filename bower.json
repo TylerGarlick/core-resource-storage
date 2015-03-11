@@ -1,6 +1,6 @@
 {
   "name": "core-resource-storage",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "keywords": [
     "seed",
     "polymer",
@@ -8,8 +8,8 @@
   ],
   "main": "core-resource-storage.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.5.4",
-    "basil.js": "~0.4.0"
+    "polymer": "Polymer/polymer#^0.5.5",
+    "basil.js": "^0.4.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.2.3"
