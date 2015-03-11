@@ -1,0 +1,213 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Store values in the Session Storage, Local Storage, Cookies, or Memory with a singular Basil.js api
+
+##### Example
+
+    <core-resource-storage kinds=['session', 'local', 'cookie', 'memory']></core-resource-storage>
+    <core-resource-storage namespace='some-namespace'></core-resource-storage>
+
+@element core-resource-storage
+@blurb Store values in the browser's resource storage using Basil.js
+@status alpha
+@homepage http://TylerGarlick.github.io/core-resource-storage
+-->
+<polymer-element name="core-resource-storage" attributes="options kinds namespace" hidden>
+  <script src="../basil.js/build/basil.js"></script>
+  <script>
+    (function () {
+
+      Polymer({
+
+        namespace: '',
+        kinds: ['session', 'local', 'cookie', 'memory'],
+
+        created: function () {
+          var self = this;
+          this.options = {
+            namespace: self.namespace,
+            storages: self.storages
+          };
+        },
+
+        ready: function () {
+          this._storage = new window.Basil(this.options);
+          document.addEventListener('storage', function (e) {
+            this._invokeStorageChanged(e.key, e.newValue, options);
+          }, false);
+
+          this.options.storages = this.storages;
+        },
+
+        /**
+         * Gets the current state of the storage
+         *
+         * @property all
+         * @type {Object}
+         * @default {}
+         */
+        get all() {
+          return this._getCurrentStateWithOptions();
+        },
+
+        /**
+         * Gets the current state of the storage
+         *
+         * @method getAll
+         * @param {Object} [options]
+         * @returns {Object}
+         */
+        getAll: function (options) {
+          options = options || this.options;
+          return this._getCurrentStateWithOptions(options);
+        },
+
+        /**
+         * Gets a object by it's key
+         *
+         * @method get
+         * @params {string} key
+         * @params {object} [options]
+         * @params {string} [options.namespace]
+         * @returns {object|array|string|null}
+         */
+        get: function (key, options) {
+          options = options || {};
+
+          if (options.namespace) {
+            options.namespace = options.namespace || this.options.namespace;
+          }
+          options.storages = options.storages || this.options.storages;
+          return this._storage.get(key, options);
+        },
+
+        /**
+         * The `core-resource-storage-changed` event is fired when value has changed
+         *
+         * @event sm-core-confirmable-success
+         * @param {Object} detail
+         *   @param {string} detail.key The value the user provided
+         *   @param {string} detail.value The value that is matched against
+         *   @param {Object} detail.options The current options
+         */
+
+
+
+        /**
+         * Set's a key valued pare
+         *
+         * @method set
+         *
+         * @fires core-resource-storage-changed
+         *
+         * @param {string} key
+         * @param {string|Object|Array} value
+         * @param {Object} [options]
+         *    @param {string} [options.namespace]
+         *
+         */
+        set: function (key, value, options) {
+          options = options || this.options || {};
+          if (this.options.namespace || options.namespace) {
+            options.namespace = options.namespace || this.options.namespace;
+          }
+          options.storages = options.storages || this.kinds;
+
+          this._storage.set(key, value, options);
+          this._invokeStorageChanged(key, value, options);
+        },
+
+        /**
+         * Removes a value by it's key
+         *
+         * @method remove
+         *
+         * @param {string} key
+         */
+        remove: function (key, options) {
+          options = options || {};
+          if (this.options.namespace || options.namespace) {
+            options.namespace = options.namespace || this.options.namespace;
+          }
+
+          options.storages = options.storages || this.options.storages;
+
+          this._storage.remove(key, options);
+
+          this.fire('core-resource-storage-removed', { key: key, options: options });
+        },
+
+        /**
+         * Clears all the keys and values
+         *
+         * @method clear
+         *
+         * @param {Object} options
+         */
+        clear: function (options) {
+          options = options || this.options;
+          this._storage.reset(options);
+          this.fire('core-resource-storage-reset');
+        },
+
+        /**
+         * Resets the storage
+         *
+         * @alias clear
+         * @method reset
+         */
+        reset: function () {
+          this.clear();
+        },
+
+
+        /**
+         * Gets all the keys
+         *
+         * @property keys
+         * @type String[]
+         */
+        get keys() {
+          return this._storage.keys(this.options);
+        },
+
+        /**
+         * Gets all the keys by a kind
+         *
+         * @method getKeys
+         *
+         * @params {Object} [options]
+         *   @params {Array} [options.kind] - the kind of storage ['local', 'session', 'memory'...]
+         *
+         *
+         * @returns {array}
+         */
+        getKeys: function (options) {
+          options = options || this.options;
+          return this._storage.keys(options);
+        },
+
+
+        _invokeStorageChanged: function (key, value, options) {
+          options = options || {};
+          this.fire('core-resource-storage-changed', { key: key, value: value, options: options });
+        },
+
+        _getCurrentStateWithOptions: function (options) {
+          options = options || this.options;
+          var state = {}
+            , self = this;
+          this.getKeys(options).forEach(function (key) {
+            var val = self.get(key, options);
+            if (val) {
+              state[key] = self.get(key, options);
+            }
+          });
+          return state;
+        }
+      });
+    })();
+
+  </script>
+</polymer-element>
