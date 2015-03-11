@@ -1,0 +1,14 @@
+{
+  "name": "core-resource-storage",
+  "homepage": "https://github.com/TylerGarlick/core-resource-storage",
+  "_release": "b6ef44ab6c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "b6ef44ab6cd5742c78f88e72f0ec279b9682074e"
+  },
+  "_source": "git://github.com/TylerGarlick/core-resource-storage.git",
+  "_target": "master",
+  "_originalSource": "TylerGarlick/core-resource-storage",
+  "_direct": true
+}
