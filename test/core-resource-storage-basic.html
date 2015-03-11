@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>core-resource-storage</title>
+
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../core-resource-storage.html">
+
+  </head>
+  <body>
+
+    <core-resource-storage id="fixture" kinds="['local']"></core-resource-storage>
+
+    <script>
+      var fixture = document.getElementById('fixture');
+
+      describe('<core-resource-storage>', function () {
+
+        beforeEach(function () {
+          fixture.clear();
+          expect(fixture.keys).to.be.empty;
+        });
+
+        it('should expose a private _storage', function () {
+          expect(fixture._storage).to.be.ok;
+        });
+
+        it('should have default storage kinds', function () {
+          expect(fixture.kinds).to.be.ok;
+          expect(fixture.kinds).to.have.lengthOf(1);
+        });
+
+        it('should be empty by default', function () {
+          expect(fixture.keys).to.be.ok;
+          expect(fixture.keys).to.be.empty;
+        });
+
+        it('should be able to set and get a value', function () {
+          var person = { name: 'billy', age: 33 };
+          fixture.set('person', person);
+          expect(fixture.get('person')).to.be.eql(person);
+        });
+
+        it('should bel able to remove a key', function () {
+          var person = { name: 'billy', age: 33 };
+          fixture.set('person', person);
+          expect(fixture.get('person')).to.be.eql(person);
+          fixture.remove('person');
+          expect(fixture.get(person)).to.not.be.ok;
+        });
+
+      });
+
+
+    </script>
+
+  </body>
+</html>
