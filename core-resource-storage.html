@@ -25,9 +25,13 @@ Store values in the Session Storage, Local Storage, Cookies, or Memory with a si
 
         created: function () {
           var self = this;
+          var storages = this.kinds;
+          if(storages.length === 0){
+            storages = ['session', 'local', 'cookie', 'memory'];
+          }
           this.options = {
             namespace: self.namespace,
-            storages: self.storages
+            storages: storages
           };
         },
 
@@ -36,8 +40,6 @@ Store values in the Session Storage, Local Storage, Cookies, or Memory with a si
           document.addEventListener('storage', function (e) {
             this._invokeStorageChanged(e.key, e.newValue, options);
           }, false);
-
-          this.options.storages = this.storages;
         },
 
         /**
