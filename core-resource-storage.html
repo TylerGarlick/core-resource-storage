@@ -21,12 +21,12 @@ Store values in the Session Storage, Local Storage, Cookies, or Memory with a si
       Polymer({
 
         namespace: '',
-        kinds: ['session', 'local', 'cookie', 'memory'],
+        kinds: ['local', 'session', 'cookie', 'memory'],
 
         created: function () {
           var self = this;
           var storages = this.kinds;
-          if(storages.length === 0){
+          if (storages.length === 0) {
             storages = ['session', 'local', 'cookie', 'memory'];
           }
           this.options = {
